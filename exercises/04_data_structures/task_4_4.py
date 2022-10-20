@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 4.4
@@ -24,3 +25,13 @@
 """
 
 vlans = [10, 20, 30, 1, 2, 100, 10, 30, 3, 4, 10]
+
+vlans_set = set(vlans)
+
+vlans_list = list(vlans_set)
+
+vlans_list.sort()
+
+result = vlans_list
+
+print(result)

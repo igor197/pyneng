@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 4.7
@@ -16,3 +17,9 @@
 """
 
 mac = "AAAA:BBBB:CCCC"
+
+mac1 = mac.replace(':','')
+
+bin1 = bin(int(mac1,16))[2:]
+
+print(bin1)

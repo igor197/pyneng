@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 4.8
@@ -26,3 +27,19 @@
 """
 
 ip = "192.168.3.1"
+
+template = """
+    {0:<8}  {1:<8}  {2:<8}  {3:<8}
+    {0:08b}  {1:08b}  {2:08b}  {3:08b}
+    """
+ip_list = ip.split('.')
+
+ip = [bin(int(ip_list[0])), bin(int(ip_list[1])), bin(int(ip_list[2])), bin(int(ip_list[3]))]
+
+#print(ip)
+
+print(template.format(int(ip_list[0]), int(ip_list[1]), int(ip_list[2]), int(ip_list[3])))
+
+
+
+

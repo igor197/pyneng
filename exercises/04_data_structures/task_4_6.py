@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
 Задание 4.6
@@ -28,3 +29,10 @@ Next-Hop              {}
 Last update           {}
 Outbound Interface    {}
 """
+
+ospf_route_list = ospf_route.split()
+
+print(template.format(ospf_route_list[0], ospf_route_list[1].strip('[]'), ospf_route_list[3].strip(','), ospf_route_list[4].strip(','), ospf_route_list[5]))
+
+
+
