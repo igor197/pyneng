@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 5.1d
@@ -43,3 +44,16 @@ london_co = {
         "routing": True,
     },
 }
+
+device = input("Введите имя устройства: ")
+device = device.lower()
+param_list = list(london_co[device])
+
+print("Введите имя параметра", param_list, end=': ')
+
+param = input()
+param = param.lower()
+print(london_co[device].get(param, "Такого параметра нет"))
+
+
+
