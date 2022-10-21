@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 5.2a
@@ -49,3 +50,43 @@ bin_ip = "00001010000000010000000111000011"
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+
+template = """
+Network:
+{0:<8}  {1:<8}  {2:<8}  {3:<8}
+{0:08b}  {1:08b}  {2:08b}  {3:08b}
+Mask:
+/{4}
+{5:<8}  {6:<8}  {7:<8}  {8:<8}
+{5:08b}  {6:08b}  {7:08b}  {8:08b}
+"""
+
+
+network = input("Введите подсеть в формате x.x.x.x/y: ")
+
+network_list = network.split('/')
+
+lan = network_list[0]
+
+mask = network_list[1]
+
+lan_list = lan.split('.')
+
+zero = 32 - int(mask)
+
+mask_bin = "1" * int(mask) + "0" * zero
+mask_bin_int = int("0b" + mask_bin, 2)
+
+octet_one = int("0b" + mask_bin[0:8], 2)
+octet_two = int("0b" + mask_bin[8:16], 2)
+octet_three = int("0b" + mask_bin[16:24], 2)
+octet_four = int("0b" + mask_bin[24:32], 2)
+
+lan = (bin(int(lan_list[3]))[:-zero])
+lan_bits = str(lan) + "0" * zero 
+lan_bits_int = int(lan_bits, 2)
+
+print(template.format(int(lan_list[0]), int(lan_list[1]), int(lan_list[2]), lan_bits_int, mask, octet_one, octet_two, octet_three, octet_four))
+
+
+
