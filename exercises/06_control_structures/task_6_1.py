@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 6.1
@@ -13,3 +14,13 @@ MAC-адреса используются в формате XXXX.XXXX.XXXX
 """
 
 mac = ["aabb:cc80:7000", "aabb:dd80:7340", "aabb:ee80:7000", "aabb:ff80:7000"]
+
+result = []
+
+for item in mac:
+    item1 = item.replace(':','.')
+    result.append(item1)
+
+print(result)
+
+

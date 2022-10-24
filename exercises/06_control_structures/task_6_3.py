@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 6.3
@@ -81,4 +82,19 @@ trunk = {
 #             print(f" {command} {vlan}")
 #         else:
 #             print(f" {command}")
+
+for intf, vlan in trunk.items():
+    print(f'interface FastEthernet{intf}')
+    for command in trunk_template:
+        if command.endswith("trunk allowed vlan"):
+            if vlan[0] == 'add':
+                print(' switchport trunk allowed vlan add ' + ','.join(vlan[1:]))
+            elif vlan[0] == 'del':
+                print(' switchport trunk allowed vlan remove ' + ','.join(vlan[1:]))
+            elif vlan[0] == 'only':
+                print(' switchport trunk allowed vlan ' + ','.join(vlan[1:]))
+        else:
+            print(f' {command}')
+
+   
 
