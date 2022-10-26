@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 7.3a
@@ -40,3 +41,24 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+
+mac_table = []
+with open('CAM_table.txt', 'r') as src_file:
+    for line in src_file:
+        if '-' in line or '_' in line:
+            pass
+        else:
+            line_list = line.split()
+            if len(line_list) != 0:
+                if line_list[0].isdigit():
+                    vlan = int(line_list[0])
+                    mac = str(line_list[1])
+                    intf = str(line_list[3])
+                    mac_table.append([vlan, mac, intf])
+
+mac_table.sort()
+
+for line1 in mac_table:
+    print('{:<8} {:<16} {}'.format(line1[0], line1[1], line1[2]))
+
+

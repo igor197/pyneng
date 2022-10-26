@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 7.3
@@ -20,3 +21,16 @@
 Ограничение: Все задания надо выполнять используя только пройденные темы.
 
 """
+
+with open('CAM_table.txt', 'r') as src_file:
+    for line in src_file:
+        if '-' in line or '_' in line:
+            pass
+        else:
+            line_list = line.split()
+            if len(line_list) != 0:
+                if line_list[0].isdigit():
+                    print('{:<8} {:<20} {}'.format(line_list[0], line_list[1], line_list[3]))
+                    
+                    
+

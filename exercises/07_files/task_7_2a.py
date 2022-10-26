@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 7.2a
@@ -17,3 +18,18 @@
 """
 
 ignore = ["duplex", "alias", "configuration"]
+
+
+with open('config_sw1.txt', 'r') as file:
+    for line in file:
+        if "!" in line:
+            pass
+        else:
+            count = 0
+            for command in ignore:
+                if command in line:
+                    count += 1
+            if count == 0:
+                print(line.rstrip())
+
+

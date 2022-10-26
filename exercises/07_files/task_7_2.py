@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 7.2
@@ -39,3 +40,12 @@ interface Ethernet0/3
 ...
 
 """
+
+
+with open('config_sw1.txt', 'r') as file:
+    for line in file:
+        if "!" in line:
+            pass
+        else:
+            print(line.rstrip())
+
