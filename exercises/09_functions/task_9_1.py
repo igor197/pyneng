@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 9.1
@@ -58,12 +59,16 @@ access_mode_template = [
 
 access_config = {"FastEthernet0/12": 10, "FastEthernet0/14": 11, "FastEthernet0/16": 17}
 
+access_config_1 = {
+        'FastEthernet0/12':10,
+        'FastEthernet0/14':11,
+        'FastEthernet0/16':17}
+
 access_config_2 = {
     "FastEthernet0/03": 100,
     "FastEthernet0/07": 101,
     "FastEthernet0/09": 107,
 }
-
 
 def generate_access_config(intf_vlan_mapping, access_template):
     """
@@ -75,3 +80,19 @@ def generate_access_config(intf_vlan_mapping, access_template):
 
     Возвращает список всех портов в режиме access с конфигурацией на основе шаблона
     """
+    access_ports = []
+    for intf, vlan in intf_vlan_mapping.items():
+        access_ports.append(f'interface {intf}')
+        for command in access_template:
+            if command.endswith('access vlan'):
+                access_ports.append(f'{command} {vlan}')
+            else:
+                access_ports.append(command)
+    return access_ports
+
+
+ports = generate_access_config(access_config_1, access_mode_template)
+
+print(ports)
+
+

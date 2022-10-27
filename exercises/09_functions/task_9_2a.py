@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 9.2a
@@ -47,3 +48,20 @@ trunk_config = {
     "FastEthernet0/2": [11, 30],
     "FastEthernet0/4": [17],
 }
+def generate_trunk_config(intf_vlan_mapping, trunk_template):
+    trunk_conf = {}
+    for intf, vlan in intf_vlan_mapping.items():
+        trunk_conf[intf] = []
+        command_list = []
+        for command in trunk_template:
+            if command.endswith('allowed vlan'):
+                vlan_str = str(vlan).strip('[]')
+                vlan_str = vlan_str.replace(', ',',')
+                command_list.append(f'{command} {vlan_str}')
+            else:
+                command_list.append(f'{command}')
+        trunk_conf[intf] = command_list
+    return trunk_conf      
+
+print(generate_trunk_config(trunk_config, trunk_mode_template))
+

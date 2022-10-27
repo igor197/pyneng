@@ -69,10 +69,8 @@ def ignore_command(command, ignore):
 
 def convert_config_to_dict(config_filename):
     conf_dict = {}
-    #list_command = []
     with open(config_filename, 'r') as src:
         for line in src:
-            #list_command = []
             if len(line) == 1:
                 pass
             else:
@@ -84,11 +82,8 @@ def convert_config_to_dict(config_filename):
                         if word in line:
                             count += 1
                     if count == 0:
-                        #list_command = []
-                        #print(line.rstrip())
                         if not line.startswith(' '):
                             glob_command = line.rstrip()
-                            #conf_dict[glob_command] = []
                             list_command = []
                         else:
                             list_command.append(line.strip())
