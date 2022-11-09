@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 15.5
@@ -26,3 +27,22 @@ description Connected to SW1 port Eth 0/1
 
 Проверить работу функции на файле sh_cdp_n_sw1.txt.
 """
+import re
+
+regexp = r'(R\d+)\s+(Eth \S+).+(Eth \S+)'
+cdp_dict = {}
+
+def generate_description_from_cdp(file_name):
+    with open(file_name, 'r') as f:
+        cdp = f.read()
+        match = re.findall(regexp, cdp)
+    for line in match:
+        cdp_dict[line[1]] = f'description Connected to {line[0]} port {line[2]}'
+
+    return cdp_dict
+
+    
+
+print(generate_description_from_cdp('sh_cdp_n_sw1.txt'))
+
+

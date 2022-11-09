@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 15.2
@@ -21,3 +22,20 @@
 Проверить работу функции на примере файла sh_ip_int_br.txt.
 
 """
+import re
+from pprint import pprint
+
+
+def parse_sh_ip_int_br(filename):
+    with open(filename) as f:
+        regexp = r'([F|L]\S+)\s+(\d+\.\d+\.\d+\.\d+|\S+)\s+.+\s+(up|adm\S+ down)\s+(up|down)'
+        show_command = f.read()
+        #for line in f:
+        #    match = re.search(regexp, line)
+        match = re.findall(regexp, show_command)
+        #print(match)
+    return match
+
+
+
+pprint(parse_sh_ip_int_br('sh_ip_int_br.txt'))

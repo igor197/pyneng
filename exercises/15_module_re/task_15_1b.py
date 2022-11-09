@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 15.1b
@@ -28,3 +29,34 @@ IP-адреса, диапазоны адресов и так далее, так 
 а не ввод пользователя.
 
 """
+import re
+from pprint import pprint
+
+
+intf_list = []
+ip_dict = {}
+def get_ip_from_cfg(file_name):
+    with open(file_name, 'r') as f:
+        regexp_int = r'interface (Ethernet\S+|Loopback\S+)'
+        regexp_ip = r'ip address (\d+\.\d+.\d+\.\d+) (\d+\.\d+.\d+\.\d+)'
+        label = 0
+        for line in f:
+            match_int = re.search(regexp_int, line)
+            match_ip = re.search(regexp_ip, line)
+            if match_int:
+                ip_list = []
+                intf = match_int.group(1)
+                label += 1
+            elif match_ip: 
+                ip_dict[intf] = match_ip.group(1, 2)
+                ip_list.append(match_ip.group(1, 2))
+                ip_dict[intf] = ip_list
+
+
+    return ip_dict
+
+
+pprint(get_ip_from_cfg('config_r2.txt'))
+
+
+

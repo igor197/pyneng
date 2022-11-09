@@ -27,26 +27,22 @@
 """
 import re
 
-intf_list = []
+
 ip_list = []
 ip_dict = {}
 def get_ip_from_cfg(file_name):
     with open(file_name, 'r') as f:
-        regexp_int = r'interface (Ethernet\S+|Loopback\S+)'
-        regexp_ip = r'ip address (\d+\.\d+.\d+\.\d+) (\d+\.\d+.\d+\.\d+)'
-        label = 0
         for line in f:
-            match_int = re.search(regexp_int, line)
-            match_ip = re.search(regexp_ip, line)
-            if match_int:
-                intf = match_int.group(1)
-                label += 1
-            elif match_ip and label > 0:
-                ip_dict[intf] = match_ip.group(1, 2)                
-
+            if 'interface' in line:
+                int_f = line.split()[-1]
+                int_f1 = int_f
+                ip_dict[int_f] = None 
+            elif 'ip address' in line:
+                ip_add = line.split()[-2:]
+                #print(ip_add)
+                ip_dict[int_f] = tuple(ip_add)
 
     return ip_dict
 
 
 print(get_ip_from_cfg('config_r1.txt'))
-
