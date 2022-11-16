@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 17.4
@@ -42,7 +43,8 @@ C-3PO,c3po@gmail.com,16/12/2019 17:24
 """
 
 import datetime
-
+import csv
+from pprint import pprint
 
 def convert_str_to_datetime(datetime_str):
     """
@@ -56,3 +58,45 @@ def convert_datetime_to_str(datetime_obj):
     Конвертирует строку с датой в формате 11/10/2019 14:05 в объект datetime.
     """
     return datetime.datetime.strftime(datetime_obj, "%d/%m/%Y %H:%M")
+
+name = []
+email = []
+name_dict = {}
+email_dict = {}
+sort_dict = {}
+
+list1 = []
+list2 = []
+
+def write_last_log_to_csv(source_log, output):
+    with open(source_log, 'r') as src:
+        reader = csv.reader(src)
+        header = next(reader)
+
+        for line in reader:
+            name = line[0]
+            email = line[1]
+            date = line[2]
+            name_dict[name] = line 
+            email_dict[email] = line
+    
+    for key, value in name_dict.items():
+        date1 = convert_str_to_datetime(value[2])
+        max_date = date1
+        for key1, value1 in name_dict.items():
+            date2 = convert_str_to_datetime(value1[2])
+            if value[1] == value1[1] and date2 > max_date:
+                max_date = date2
+                email_dict[value1[1]] = value1
+                break
+    
+    with open(output, 'w') as dst:
+        writer = csv.writer(dst)
+        writer.writerow(header)
+        for key2, value2 in email_dict.items():
+            writer.writerow(value2)
+                
+                
+
+pprint(write_last_log_to_csv('mail_log.csv', 'test.csv'))
+

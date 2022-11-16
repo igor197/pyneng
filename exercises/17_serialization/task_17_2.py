@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 17.2
@@ -44,8 +45,45 @@
 """
 
 import glob
+import re
+import csv
+from pprint import pprint
 
 sh_version_files = glob.glob("sh_vers*")
-# print(sh_version_files)
+#print(sh_version_files)
 
 headers = ["hostname", "ios", "image", "uptime"]
+
+regexp_ver = r'Cisco IOS Software, .+ Version (\S+),.+ .+ uptime is (\d+ \S+, \d+ \S+, \d+ \S+) .+ System image file is "(\S+)"'
+#regexp_ver = r'Cisco IOS Software, .+ Version (\S+).+ .+ uptime is (\d+ \S+, \d+ \S+, \d+ \S+) .+ System image file is "(\S+)"'
+
+int_list = []
+
+def parse_sh_version(sh_version):
+    list1 = []
+    sh_version1 = sh_version.replace('\n', ' ')
+    result = re.findall(regexp_ver, sh_version1)
+    list1.append(result[0][0])
+    list1.append(result[0][2])
+    list1.append(result[0][1])
+
+    return list1
+
+def write_inventory_to_csv(list_files, out_file):
+    with open(out_file, 'w') as dst:
+        writer = csv.writer(dst)
+        writer.writerow(headers)
+
+    for f in sh_version_files:
+        hostname = f.split('_')
+        sw = hostname[2].split('.')[0]
+        with open(f, 'r') as source, open(out_file, 'a+') as dst:
+            sh_ver = source.read()
+            inventory = parse_sh_version(sh_ver)
+            inventory.insert(0, sw)
+            print(inventory)
+            writer = csv.writer(dst)
+            writer.writerow(inventory)
+
+
+write_inventory_to_csv(sh_version_files, 'inventory_ios.csv')
