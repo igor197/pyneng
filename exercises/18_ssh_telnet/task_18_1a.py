@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 18.1a
@@ -11,3 +12,32 @@
 
 Для проверки измените пароль на устройстве или в файле devices.yaml.
 """
+
+import yaml
+import netmiko
+import paramiko
+from pprint import pprint
+
+
+def send_show_command(device_info, cisco_command):
+
+    try:
+        ssh = netmiko.ConnectHandler(**device_info)
+        ssh.enable()
+        result = ssh.send_command(cisco_command)
+        return result
+
+    except netmiko.ssh_exception.NetmikoAuthenticationException as error:
+        print(error)
+
+
+if __name__ == "__main__":
+    command = "sh ip int br"
+    with open("devices.yaml") as f:
+        devices = yaml.safe_load(f)
+    
+    for dev in devices:
+        print(send_show_command(dev, command))
+
+
+

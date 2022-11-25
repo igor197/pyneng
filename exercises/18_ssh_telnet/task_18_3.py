@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 18.3
@@ -47,6 +48,49 @@ In [16]: send_commands(r1, config=commands)
 Out[16]: 'config term\nEnter configuration commands, one per line.  End with CNTL/Z.\nR1(config)#username user5 password pass5\nR1(config)#username user6 password pass6\nR1(config)#end\nR1#'
 
 """
+import yaml
+import netmiko
+from pprint import pprint
 
 commands = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"]
 command = "sh ip int br"
+
+def send_show_command(dev, comm):
+    ssh = netmiko.ConnectHandler(**dev)
+    ssh.enable()
+    result = ssh.send_command(comm)
+    return result
+
+def send_config_commands(dev, comm):
+    ssh = netmiko.ConnectHandler(**dev)
+    ssh.enable()
+    result = ssh.send_config_set(comm)
+    return result
+   
+def send_commands(device, **kwargs):
+    for key,value in kwargs.items():
+        command = value
+    ssh = netmiko.ConnectHandler(**device)
+    ssh.enable()
+    if key == 'show':
+        res = send_show_command(device, value)
+        return res
+    elif key == 'config':
+        res = send_config_commands(device, value)
+        return res
+
+   
+if __name__ == "__main__":
+    with open('device.yaml') as src:
+        result = yaml.safe_load(src)
+        #print(result)
+        for dev in result:
+
+            try:
+                pprint(send_commands(dev, show= command))#, config = 'username test12 password test12')
+                #pprint(send_commands(dev, config = commands))
+            except TypeError as error:
+                print(error)
+
+
+

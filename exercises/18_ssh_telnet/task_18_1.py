@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 18.1
@@ -18,7 +19,16 @@
 
 """
 import yaml
+import netmiko
 
+
+def send_show_command(device_info, cisco_command):
+    ssh = netmiko.ConnectHandler(**device_info)
+    ssh.enable()
+    result = ssh.send_command(cisco_command)
+    print(result)
+    
+    return result
 
 
 if __name__ == "__main__":
