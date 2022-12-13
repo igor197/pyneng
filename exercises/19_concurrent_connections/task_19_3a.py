@@ -75,10 +75,10 @@ import time
 
 netmiko_dict = {
     'device_type': 'cisco_ios',
-    'password': 'cisco',
-    'secret': 'cisco',
+    'password': '',
+    'secret': '',
     'timeout': 10,
-    'username': 'cisco'
+    'username': ''
 }
 
 def connect_ssh(ip, commands_dict): 

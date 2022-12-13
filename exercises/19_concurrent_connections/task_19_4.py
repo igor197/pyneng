@@ -116,15 +116,6 @@ from datetime import datetime
 import time
 
 
-netmiko_dict = {
-    'device_type': 'cisco_ios',
-    'password': 'cisco',
-    'secret': 'cisco',
-    'timeout': 10,
-    'username': 'cisco'
-}
-
-
 def send_show_commands(device, commands):
     stdout = []
     with netmiko.ConnectHandler(**device) as ssh:
@@ -146,14 +137,13 @@ def send_config_commands(device, commands):
         if type(commands) is str:
             commands = [commands]
         
-        result = ssh.send_config_set(commands)#:w, strip_command = False)
+        result = ssh.send_config_set(commands)
         output = f'{hostname}{result}\n'
         stdout.append(output)
         #pprint(result)
     return output    
 
 
-#def send_commands_to_devices(devices, filename, show = None, config = None, limit = 3):
 def send_commands_to_devices(devices, filename, limit = 3, **kwargs):
     for key, value in kwargs.items():
         if key == 'show':
@@ -171,8 +161,6 @@ def send_commands_to_devices(devices, filename, limit = 3, **kwargs):
                     for line in res:
                         dst.writelines(line)
                         pprint(line)        
-        else:
-            print('Папраметры надо передавать как ключевые')
             
     
 if __name__ == "__main__":
@@ -182,12 +170,8 @@ if __name__ == "__main__":
             
             try:
                 
-                #pprint(devices_list)
-                #send_commands_to_devices(devices_list, 'task_19_4.txt', show = ['sh ip int bri', 'sh clock'])
-                send_commands_to_devices(devices_list, 'task_19_4.txt', config = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"])
-                #send_commands_to_devices(devices_list, 'result.txt', show = 'sh clock')#, 'username test password test')
-                #for device in devices_list:
-                    #pprint(send_show_commands(device, ['sh ip int bri', 'sh clock']))
+                send_commands_to_devices(devices_list, 'result.txt', show = 'sh clock')
+                #sned_commands_to_devices(devices_list, 'result.txt;, config = 'username test password test')
             
             except TypeError as error:
                 print(error)

@@ -56,14 +56,6 @@ from concurrent.futures import ThreadPoolExecutor
 from itertools import repeat
 
 
-netmiko_dict = {
-    'device_type': 'cisco_ios',
-    'password': 'cisco',
-    'secret': 'cisco',
-    'timeout': 10,
-    'username': 'cisco'
-}
-
 def connect_ssh(device_dict, command):
     with netmiko.ConnectHandler(**device_dict) as ssh:
         ssh.enable()
