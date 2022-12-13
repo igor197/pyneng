@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 19.3
@@ -47,3 +48,42 @@ commands = {
     "192.168.100.1": "sh ip int br",
     "192.168.100.2": "sh int desc",
 }
+
+import netmiko
+import yaml
+from pprint import pprint
+from concurrent.futures import ThreadPoolExecutor
+from itertools import repeat
+
+
+netmiko_dict = {
+    'device_type': 'cisco_ios',
+    'password': 'cisco',
+    'secret': 'cisco',
+    'timeout': 10,
+    'username': 'cisco'
+}
+
+def connect_ssh(device_dict, command):
+    with netmiko.ConnectHandler(**device_dict) as ssh:
+        ssh.enable()
+        hostname = ssh.find_prompt()
+        result = ssh.send_command(command, strip_command = False)
+        res = f'{hostname}{result}\n'
+    return res
+
+def send_command_to_devices(devices, commands_dict, filename, limit=3):
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        res = executor.map(connect_ssh, devices, commands_dict.values())
+        with open(filename, 'w') as dst:
+            for line in res:
+                dst.writelines(line)
+                print(line)
+
+
+if __name__ == "__main__":
+    with open('devices.yaml', 'r') as src:
+        devices_list = yaml.safe_load(src)
+    send_command_to_devices(devices_list, commands, 'sh_command.txt')
+
+

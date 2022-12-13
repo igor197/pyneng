@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 19.4
@@ -105,3 +106,91 @@ R3#
 
 Для выполнения задания можно создавать любые дополнительные функции.
 """
+
+import netmiko                                                                    
+import yaml                              
+from pprint import pprint
+from concurrent.futures import ThreadPoolExecutor
+from itertools import repeat                                                                            
+from datetime import datetime
+import time
+
+
+netmiko_dict = {
+    'device_type': 'cisco_ios',
+    'password': 'cisco',
+    'secret': 'cisco',
+    'timeout': 10,
+    'username': 'cisco'
+}
+
+
+def send_show_commands(device, commands):
+    stdout = []
+    with netmiko.ConnectHandler(**device) as ssh:
+        ssh.enable()
+        hostname = ssh.find_prompt()
+        if type(commands) is str:
+            commands = [commands]
+        for command in commands:
+            result = ssh.send_command(command, strip_command = False)
+            output = f'{hostname}{result}\n'
+            stdout.append(output)
+    return stdout
+               
+def send_config_commands(device, commands):
+    stdout = []
+    with netmiko.ConnectHandler(**device) as ssh:
+        ssh.enable()
+        hostname = ssh.find_prompt()
+        if type(commands) is str:
+            commands = [commands]
+        
+        result = ssh.send_config_set(commands)#:w, strip_command = False)
+        output = f'{hostname}{result}\n'
+        stdout.append(output)
+        #pprint(result)
+    return output    
+
+
+#def send_commands_to_devices(devices, filename, show = None, config = None, limit = 3):
+def send_commands_to_devices(devices, filename, limit = 3, **kwargs):
+    for key, value in kwargs.items():
+        if key == 'show':
+            with ThreadPoolExecutor(max_workers=limit) as executor:
+                res = executor.map(send_show_commands, devices, repeat(value))
+                with open(filename, 'w') as dst:
+                    for line in res:
+                        dst.writelines(line)
+                        pprint(line)
+        
+        elif key == 'config':
+            with ThreadPoolExecutor(max_workers=limit) as executor:
+                res = executor.map(send_config_commands, devices, repeat(value))
+                with open(filename, 'w') as dst:
+                    for line in res:
+                        dst.writelines(line)
+                        pprint(line)        
+        else:
+            print('Папраметры надо передавать как ключевые')
+            
+    
+if __name__ == "__main__":
+    with open('devices.yaml', 'r') as src:
+            start_time = datetime.now()
+            devices_list = yaml.safe_load(src)
+            
+            try:
+                
+                #pprint(devices_list)
+                #send_commands_to_devices(devices_list, 'task_19_4.txt', show = ['sh ip int bri', 'sh clock'])
+                send_commands_to_devices(devices_list, 'task_19_4.txt', config = ["logging 10.255.255.1", "logging buffered 20010", "no logging console"])
+                #send_commands_to_devices(devices_list, 'result.txt', show = 'sh clock')#, 'username test password test')
+                #for device in devices_list:
+                    #pprint(send_show_commands(device, ['sh ip int bri', 'sh clock']))
+            
+            except TypeError as error:
+                print(error)
+            
+    print(f'Время выполнения скрипта: {datetime.now() - start_time}')
+                
