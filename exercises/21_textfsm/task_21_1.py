@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 21.1
@@ -16,10 +17,33 @@
 
 """
 from netmiko import ConnectHandler
+import textfsm
+from pprint import pprint
+
+list1 = []
+def parse_command_output(template, command_output):
+    with open(template) as src:
+        fsm = textfsm.TextFSM(src)
+        head = fsm.header
+        list1.append(head)
+        result = fsm.ParseText(command_output)
+        for item in result:
+            list1.append(item)
+        
+    return list1
+
 
 
 # вызов функции должен выглядеть так
+
 if __name__ == "__main__":
+    
+    with open('output/sh_ip_dhcp_snooping.txt', 'r') as src:
+        out = src.read()
+    result = parse_command_output("templates/sh_ip_dhcp_snooping.template", out)
+    print(result)
+    
+    '''
     r1_params = {
         "device_type": "cisco_ios",
         "host": "192.168.100.1",
@@ -32,3 +56,4 @@ if __name__ == "__main__":
         output = r1.send_command("sh ip int br")
     result = parse_command_output("templates/sh_ip_int_br.template", output)
     print(result)
+    '''

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Задание 21.1a
@@ -16,3 +17,36 @@
 Проверить работу функции на выводе команды output/sh_ip_int_br.txt
 и шаблоне templates/sh_ip_int_br.template.
 """
+
+from netmiko import ConnectHandler
+import textfsm
+
+
+def parse_output_to_dict(template, command_output):
+    with open(template) as src:
+        fsm = textfsm.TextFSM(src)
+        #head = fsm.header
+        result = fsm.ParseTextToDicts(command_output)
+        #print(result)
+        
+    return result #head
+
+
+
+# вызов функции должен выглядеть так
+if __name__ == "__main__":
+    '''
+    r1_params = {
+        "device_type": "cisco_ios",
+        "host": "192.168.100.1",
+        "username": "cisco",
+        "password": "cisco",
+        "secret": "cisco",
+    }
+    '''
+    with open('output/sh_ip_int_br.txt', 'r') as src:
+        out = src.read()
+        #print(out)
+    
+    result = parse_output_to_dict("templates/sh_ip_int_br.template", out)
+    print(result)
